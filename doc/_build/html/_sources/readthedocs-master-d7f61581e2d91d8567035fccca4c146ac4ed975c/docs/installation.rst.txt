@@ -1,0 +1,9 @@
+Installing undocumented
+=======================
+
+
+To get the source code for this demo repository just `download the file <https://lab.cluster.gsi.dit.upm.es/docs/readthedocs/repository/archive.zip?ref=master>`_ or clone the repository with git:
+
+.. code-block:: bash
+
+   git clone https://lab.cluster.gsi.dit.upm.es/docs/readthedocs/tree/master

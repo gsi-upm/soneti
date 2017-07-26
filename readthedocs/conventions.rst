@@ -25,19 +25,19 @@ Posts
 
 Posts are self-contained pieces of content that typically include:
 
- * sioc:id
- * dcterms:title
- * sioc:link
- * sioc:links_to
- * sioc:has_creator
- * sioc:has_container
- * sioc:has_space
- * sioc:topic (can be used to add tags or categories)
- * sioc:has_reply
- * sioc:content
- * sioc:attachment
- * sioc:num_views
- * sioc:content
+* sioc:id
+* dcterms:title
+* sioc:link
+* sioc:links_to
+* sioc:has_creator
+* sioc:has_container
+* sioc:has_space
+* sioc:topic (can be used to add tags or categories)
+* sioc:has_reply
+* sioc:content
+* sioc:attachment
+* sioc:num_views
+* sioc:content
 
 Ideally, we will align with [SIOC](http://rdfs.org/sioc/spec/).
 

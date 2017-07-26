@@ -12,6 +12,7 @@ Welcome to soneti's documentation!
 
    what-is-soneti
    uses-soneti
+   conventions
 
 Indices and tables
 ==================

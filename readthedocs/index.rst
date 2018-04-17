@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to soneti's documentation!
+Welcome to Soneti's documentation!
 ==================================
 
 .. toctree::
@@ -11,8 +11,11 @@ Welcome to soneti's documentation!
    :caption: Contents:
 
    what-is-soneti
-   uses-soneti
+   installation
+   usecases
    conventions
+..   uses-soneti
+   
 
 Indices and tables
 ==================

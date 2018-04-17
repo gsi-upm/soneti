@@ -1,19 +1,28 @@
-==============
-What is Soneti
-==============
+===============
+What is Soneti?
+===============
 
-**Soneti** is a toolkit for **analyzing social software**, such as social networks (e.g. Twitter, Facebook, ...), blogs, YouTube, AppStores, etc.. 
+**Soneti** is a toolkit for **analyzing social software**, such as social networks (e.g. Twitter, Facebook, ...), blogs, YouTube, Newspapers, AppStores, etc.. 
 
-Its purpose is to provide tools to carry out automatic analysis about the contents and the users of this social software. Some of the applications we have developed are sentiment and emotion analysis for brand monitoring, radicalism analysis, personality analysis of youtubers, to name a few.
+It obtains data from diffetent sources, in addition it enrich this obtained data by performing different types of automatic analysis. Finally, it allows us to visualize the data obtained in interactive dashboards.
+
+Some of the applications we have developed are sentiment and emotion analysis for brand monitoring, radicalism analysis, personality analysis of youtubers, to name a few.
 
 
-.. figure:: figures/gsi-social-network-analysis.jpg
-   :scale: 80%
+
+
+Architecture
+~~~~~~~~~~~~
+
+Soneti has a modular architecture and we differentiate three main modules, as we can see in the image.
+
+.. figure:: figures/soneti.png
    :alt: Soneti overview
 
-Someti is structured into four blocks:
+* **Ingestion tool:** This module is called **GSICrawler** and is responsible for obtaining data from different sources, whether they are newspapers or social networks. For more information about this module or to add new data sources visit the documentation on http://gsicrawler.readthedocs.io
 
-* **Ingestion tools:** tools for aggregating information from social networks. Two approaches can be followed using an API (e.g. Twitter, Facebook or Logstash) or Scraping (e.g. GSICrawler and Scrappy). 
-* **Social Software Analysis:** tools for analysing the incoming information. The core of this tools is a workflow engine (**Luigi**) which orchestrates the data pipelines, from ingestion to analysis and storing. The information is usually analyzed with **Senpy** and stored in **ElasticSearch**.
-* **Social Simulation:** tools for simulating the behaviour of social networks. The tool **Soil** provides an agent-based simulator based on **NetworkX**.
-* **Query & Visualization**: tools for visualuazing and querying the results. We provide **Sefarad**, which enables the development of dashboards and includes a semantic query interface. In addition, **Kibana** can be used for visual analytics.
+* **Social Software Analysis:** tools for data enrichment. This module uses **Senpy**: an analysis service, it allows us to obtain the sentiments, emotions or detect entities present in a certain text. To obtain more information about Senpy or to add new plugins for analysis visit the documentation on http://senpy.readthedocs.io
+
+* **Query & Visualization**: tools for visualuazing and querying the results. We provide **Sefarad**, which enables the development of dashboards and includes a semantic query interface. It is based on Web Components and allows us to obtain an interactive overview of the data collected and enriched through the previous modules. Soneti provides a predefined dashboard if you are interested in getting more information and creating your own dashboards visit the Sefarad's documentation on http://sefarad.readthedocs.io
+
+Above all these modules we find the orchestrator Luigi, who is in charge of coordinating and establishing the relationships between all the modules.

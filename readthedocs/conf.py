@@ -13,6 +13,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+
+import sys
+import os
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -24,6 +28,9 @@
 
 # -- General configuration ------------------------------------------------
 
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+
 # If your documentation needs a minimal Sphinx version, state it here.
 #
 # needs_sphinx = '1.0'
@@ -31,7 +38,12 @@
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = [    
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.todo',
+    'sphinxcontrib.httpdomain',
+    'sphinx.ext.coverage',]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -46,8 +58,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'soneti'
-copyright = '2017, J. Fernando Sánchez-Rada, Alberto Pascual, Carlos A. Iglesias'
+project = 'Soneti'
+copyright = '2018, J. Fernando Sánchez-Rada, Alberto Pascual, Carlos A. Iglesias'
 author = 'J. Fernando Sánchez-Rada, Alberto Pascual, Carlos A. Iglesias'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -75,7 +87,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = False
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -96,6 +107,13 @@ html_theme = 'alabaster'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html',
+        'searchbox.html',
+        ]
+}
 
 # -- Options for HTMLHelp output ------------------------------------------
 

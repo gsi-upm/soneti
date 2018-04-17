@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>What is Soneti &#8212; soneti 1.0 documentation</title>
+    <title>What is Soneti? &#8212; Soneti 1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Uses of Soneti" href="uses-soneti.html" />
-    <link rel="prev" title="Welcome to soneti’s documentation!" href="index.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Welcome to Soneti’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -44,19 +44,23 @@
           <div class="body" role="main">
             
   <div class="section" id="what-is-soneti">
-<h1>What is Soneti<a class="headerlink" href="#what-is-soneti" title="Permalink to this headline">¶</a></h1>
-<p><strong>Soneti</strong> is a toolkit for <strong>analyzing social software</strong>, such as social networks (e.g. Twitter, Facebook, ...), blogs, YouTube, AppStores, etc..</p>
-<p>Its purpose is to provide tools to carry out automatic analysis about the contents and the users of this social software. Some of the applications we have developed are sentiment and emotion analysis for brand monitoring, radicalism analysis, personality analysis of youtubers, to name a few.</p>
+<h1>What is Soneti?<a class="headerlink" href="#what-is-soneti" title="Permalink to this headline">¶</a></h1>
+<p><strong>Soneti</strong> is a toolkit for <strong>analyzing social software</strong>, such as social networks (e.g. Twitter, Facebook, ...), blogs, YouTube, Newspapers, AppStores, etc..</p>
+<p>It obtains data from diffetent sources, in addition it enrich this obtained data by performing different types of automatic analysis. Finally, it allows us to visualize the data obtained in interactive dashboards.</p>
+<p>Some of the applications we have developed are sentiment and emotion analysis for brand monitoring, radicalism analysis, personality analysis of youtubers, to name a few.</p>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<p>Soneti has a modular architecture and we differentiate three main modules, as we can see in the image.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="_images/gsi-social-network-analysis.jpg"><img alt="Soneti overview" src="_images/gsi-social-network-analysis.jpg" style="width: 633.6px; height: 361.6px;" /></a>
+<img alt="Soneti overview" src="_images/soneti.png" />
 </div>
-<p>Someti is structured into four blocks:</p>
 <ul class="simple">
-<li><strong>Ingestion tools:</strong> tools for aggregating information from social networks. Two approaches can be followed using an API (e.g. Twitter, Facebook or Logstash) or Scraping (e.g. GSICrawler and Scrappy).</li>
-<li><strong>Social Software Analysis:</strong> tools for analysing the incoming information. The core of this tools is a workflow engine (<strong>Luigi</strong>) which orchestrates the data pipelines, from ingestion to analysis and storing. The information is usually analyzed with <strong>Senpy</strong> and stored in <strong>ElasticSearch</strong>.</li>
-<li><strong>Social Simulation:</strong> tools for simulating the behaviour of social networks. The tool <strong>Soil</strong> provides an agent-based simulator based on <strong>NetworkX</strong>.</li>
-<li><strong>Query &amp; Visualization</strong>: tools for visualuazing and querying the results. We provide <strong>Sefarad</strong>, which enables the development of dashboards and includes a semantic query interface. In addition, <strong>Kibana</strong> can be used for visual analytics.</li>
+<li><strong>Ingestion tool:</strong> This module is called <strong>GSICrawler</strong> and is responsible for obtaining data from different sources, whether they are newspapers or social networks. For more information about this module or to add new data sources visit the documentation on <a class="reference external" href="http://gsicrawler.readthedocs.io">http://gsicrawler.readthedocs.io</a></li>
+<li><strong>Social Software Analysis:</strong> tools for data enrichment. This module uses <strong>Senpy</strong>: an analysis service, it allows us to obtain the sentiments, emotions or detect entities present in a certain text. To obtain more information about Senpy or to add new plugins for analysis visit the documentation on <a class="reference external" href="http://senpy.readthedocs.io">http://senpy.readthedocs.io</a></li>
+<li><strong>Query &amp; Visualization</strong>: tools for visualuazing and querying the results. We provide <strong>Sefarad</strong>, which enables the development of dashboards and includes a semantic query interface. It is based on Web Components and allows us to obtain an interactive overview of the data collected and enriched through the previous modules. Soneti provides a predefined dashboard if you are interested in getting more information and creating your own dashboards visit the Sefarad&#8217;s documentation on <a class="reference external" href="http://sefarad.readthedocs.io">http://sefarad.readthedocs.io</a></li>
 </ul>
+<p>Above all these modules we find the orchestrator Luigi, who is in charge of coordinating and establishing the relationships between all the modules.</p>
+</div>
 </div>
 
 
@@ -64,22 +68,29 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to soneti&#8217;s documentation!</a></li>
-      <li>Next: <a href="uses-soneti.html" title="next chapter">Uses of Soneti</a></li>
-  </ul></li>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Soneti</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What is Soneti?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
 </ul>
-</div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/what-is-soneti.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usecases.html">Use cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">Conventions</a></li>
+</ul>
+
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -95,11 +106,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2017, J. Fernando Sánchez-Rada, Alberto Pascual, Carlos A. Iglesias.
+      &copy;2018, J. Fernando Sánchez-Rada, Alberto Pascual, Carlos A. Iglesias.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/what-is-soneti.rst.txt"

@@ -1,8 +1,0 @@
-Using undocumented
-==================
-
-Open your browser with ``firefox docs/_build/html/index.html`` and enjoy the beauty of our image:
-
-.. image:: ../iamundocumented.jpg
-
-

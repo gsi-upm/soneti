@@ -1,0 +1,18 @@
+[submodule "readthedocs/gsicrawler"]
+	path = readthedocs/gsicrawler
+	url = http://lab.cluster.gsi.dit.upm.es/gsicrawler/gsicrawler.git
+[submodule "readthedocs/senpy"]
+	path = readthedocs/senpy
+	url = http://lab.cluster.gsi.dit.upm.es/senpy/senpy.git
+[submodule "readthedocs/orchestrator"]
+	path = readthedocs/orchestrator
+	url = http://lab.cluster.gsi.dit.upm.es/social/orchestrator.git
+[submodule "gsicrawler"]
+	path = gsicrawler
+	url = http://lab.cluster.gsi.dit.upm.es/gsicrawler/gsicrawler.git
+[submodule "senpy"]
+	path = senpy
+	url = http://lab.cluster.gsi.dit.upm.es/senpy/senpy.git
+[submodule "orchestrator"]
+	path = orchestrator
+	url = http://lab.cluster.gsi.dit.upm.es/social/orchestrator.git

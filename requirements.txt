@@ -1,0 +1,7 @@
+luigi
+elasticsearch
+rdflib
+requests 
+sqlalchemy 
+ftfy 
+rdflib-jsonld

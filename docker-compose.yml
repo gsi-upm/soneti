@@ -1,0 +1,76 @@
+version: '2'
+services:
+  gsicrawler:
+    image: gsiupm/gsicrawler
+    ports:
+     - "5555:5555"
+     - "5000:5000"
+    networks:
+      - soneti
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+
+  orchestrator:
+    build: .
+    volumes: 
+      - .:/usr/src/app
+    ports:
+     - "8082:8082"
+    networks:
+      - soneti
+
+  fuseki:
+    image: stain/jena-fuseki
+    ports:
+      - "3030:3030"
+    volumes:
+     - fusekidata:/fuseki
+    environment:
+      - ADMIN_PASSWORD=fusekisoneti
+    networks:
+      - soneti
+
+  senpy:
+    image: gsiupm/senpy
+    command: --default-plugins
+    ports:
+     - "8000:5000"
+    networks:
+      - soneti
+
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:5.5.2"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "xpack.security.enabled=false"
+      - "http.cors.enabled=true"
+      - 'http.cors.allow-origin=*'
+    volumes:
+      - esdata:/usr/share/elasticsearch/data/
+    ports:
+      - 19200:9200
+      - 19300:9300
+    networks:
+      - soneti
+
+  redis:
+    image: redis
+    networks:
+      - soneti
+
+networks:
+  soneti:
+    driver: bridge
+
+volumes:
+  esdata:
+  fusekidata:
+

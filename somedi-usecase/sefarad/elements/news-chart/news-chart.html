@@ -1,0 +1,230 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="/bower_components/iron-collapse/iron-collapse.html">
+
+
+<dom-module id="news-chart">
+
+<link rel="import" type="css" href="tweet-chart.css">
+
+  <template>
+
+    <!-- Shadow DOM -->
+    <paper-material elevation="1">
+        <table class="table table-striped">
+          <tr>
+            <th style="width: 10%; text-align: center">Source</th>
+            <th style="width: 50%; text-align: center">Text</th>
+            <th style="width: 20%; text-align: center">Date</th>
+            <th style="width: 20%; text-align: center">User</th>
+          </tr>
+        </table>
+        <template is="dom-repeat" items="{{data}}" as="post"> 
+          <div class$="tweet {{checkSentiment(post.sentiments)}} same-height" ident$="subitem[[index]]" on-click="toggle" aria-expanded$="[[opened]]" aria-controls="collapse" style=" text-align: center;" data-toggle="tooltip" data-placement="top" title="Click for details">
+            <div class="row"><div class="col-md-12 headline">
+              <div class="col-md-2">
+                <img src={{checkSource(post.schema:author)}} style="width: 80px; display:block; position: relative;" align="left">
+              </div>
+              <div class="col-md-5">
+                <span style="font-size:15px; display:inline-block; vertical-align: middle;">{{post.schema:articleBody}}</span>
+              </div>
+              <div class="col-md-3">
+                <p style="text-align:center;">{{getDate(post.schema:datePublished)}}</p>
+              </div>
+              <div class="col-md-2">
+                <p style="text-align:center;">{{post.schema:creator}}</p><iron-icon style="left:87%; top: 8px; position:absolute;" icon="icons:search">
+
+              </div>
+            </div>        
+            </div>
+
+            <iron-collapse ident$="subitem[[index]]">
+              <div class="content" style="text-align:justify; width: 94%; margin: 0 auto;">
+                <br>
+                <a href="{{returnURL(post)}}" target="_blank">View original source</a>
+                <span>{{getLikes(post.likes)}}</span>
+                <br>
+                <template is="dom-repeat" items="{{post.comments.data}}" as="comment"> 
+                <span>From: {{comment.from.name}}</span><br>
+                <span>{{comment.message}}</span><br><br>
+              </div>
+            </iron-collapse>
+            </template>
+          </div>
+        </template>
+        <br>
+    </paper-material>
+
+  </template>
+
+  <script>
+    var filtered = false;
+
+    Polymer({
+
+      is: 'news-chart',
+
+      properties: {
+
+        data: {
+            type: Array,
+            value: [] //default value for data array.
+        },
+
+        icon: {
+          type: String,
+          value: "face"
+        },
+
+        title: {
+          type: String,
+          value: "List of different tweets"
+        },
+        buttontext:{
+          type: String,
+          value : "See more"
+        },
+
+        brand: {
+          type: String,
+          value: "Undefined"
+        },
+
+        query: {
+          type: String,
+          observer: '_queryChanged'
+        },
+
+        index: {
+          type: String
+        },
+
+        subindex: {
+          type: String
+        },
+
+        fields: {
+          type: Array,
+          value: function() { return []; }
+        },
+
+        datos:{
+          type: Object,
+          observer: '_dataChanged'
+        },
+
+        field: {
+          type: String
+        },
+
+        host: {
+          type: String
+        },
+
+        param: {
+          type: String,
+          notify: true
+        },
+
+        filters: {
+          type: Array,
+          notify: true,
+          value: function() { return []; }
+        },
+        type:{
+          type: String
+        }
+      },
+
+      ready: function() {   
+
+      },
+      getLikes: function(likes){
+        if (likes != undefined) return "Likes: "+likes;
+      },
+      toggle: function(event) {
+        var id = event.currentTarget.getAttribute('ident');
+        var collapse = this.$$('iron-collapse[ident="' + id + '"]');
+        //console.log(collapse)
+        //console.log("id: "+id+" collapse: "+ collapse.getAttribute('ident'))
+        collapse.toggle();
+      },
+
+      _dataChanged: function() {
+        var that = this
+        var hits = this.datos.hits.hits;
+        var results = []
+        //console.log(hits)
+        hits.forEach(function(entry) {
+          if (that.type == 'official'){
+            if((entry._source['schema:creator'] == 'rest_lateral') || (entry._source['schema:creator'] == 'restauranteslateral')) results.push(entry._source);
+          } else {
+            if((entry._source['schema:creator'] != 'rest_lateral') && (entry._source['schema:creator'] != 'restauranteslateral')) results.push(entry._source);
+          }
+        });
+        //console.log(results)
+        that.data = results
+      },
+      getDate: function(date){
+        var fecha = date.toString().split("-");
+        //console.log(fecha[2].split("T")[0]+"-"+fecha[1]+"-"+fecha[0])
+        return fecha[2].split("T")[0]+"-"+fecha[1]+"-"+fecha[0]
+      },
+      returnURL: function(url){
+        return url['@id']
+      },
+      checkSentiment: function(sentiment) {
+        //console.log(sentiment[0]['marl:hasPolarity'])
+        try{
+          if (sentiment[0]['marl:hasPolarity'] == "marl:Positive")
+            return "tweet positive-news"
+          else if (sentiment[0]['marl:hasPolarity'] == "marl:Negative")
+            return "tweet negative-news"
+          else 
+            return "tweet neutral-news"
+        }
+        catch (e){
+          //console.log(e)
+          return "tweet neutral-news"
+        }
+      },
+      getemotion: function(emotion) {
+        //console.log(emotion)
+        return emotion[0]['onyx:hasEmotion']['onyx:hasEmotionCategory'].split(':')[1]
+      },
+      checkSpanSentiment: function(sentiment) {
+        //console.log(sentiment)
+        if (sentiment == "marl:Positive")
+          return "span positive"
+        else if (sentiment == "marl:Negative")
+          return "span negative"
+        else 
+          return "span neutral"
+      },
+
+      checkSource: function(source) {
+        if(source.indexOf("twitter") > -1 || source.indexOf("twitter") > -1 )
+          return "/images/twitter.png"
+        else 
+          return "/images/facebook.png"
+      },
+      checkEmotion: function(source) {
+        if(source[0]['onyx:hasEmotion']['onyx:hasEmotionCategory'].indexOf("anger") > -1)
+          return "/images/emotion/anger.png"
+        else if(source[0]['onyx:hasEmotion']['onyx:hasEmotionCategory'].indexOf("disgust") > -1)
+          return "/images/emotion/disgust.png"
+        else if(source[0]['onyx:hasEmotion']['onyx:hasEmotionCategory'].indexOf("fear") > -1)
+          return "/images/emotion/fear.png"
+        else if(source[0]['onyx:hasEmotion']['onyx:hasEmotionCategory'].indexOf("joy") > -1)
+          return "/images/emotion/joy.png"
+        else if(source[0]['onyx:hasEmotion']['onyx:hasEmotionCategory'].indexOf("neutral") > -1)
+          return "/images/emotion/neutral.png"
+        else if(source[0]['onyx:hasEmotion']['onyx:hasEmotionCategory'].indexOf("sadness") > -1)
+          return "/images/emotion/sadness.png"
+      }
+
+    });
+  </script>
+
+</dom-module>

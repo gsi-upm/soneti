@@ -1,0 +1,22 @@
+{
+  "name": "entities-chart",
+  "authors": [
+    "gsi-upm"
+  ],
+  "version" : "1.0.1",
+  "description": "Web Component designed to visualize entities present in Tweets",
+  "main": "entities-chart.html",
+  "keywords": [
+    "entities",
+    "polymer",
+    "elasticsearch",
+    "webcomponents"
+  ],
+  "dependencies": {
+    "iron-icons": "PolymerElements/iron-icons#^1.0.0",
+    "paper-button": "PolymerElements/paper-button#^1.0.0",
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "license": "MIT",
+  "homepage": "https://lab.cluster.gsi.dit.upm.es/sefarad/entities-chart"
+}

@@ -1,0 +1,102 @@
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/jqcloud2/dist/jqcloud.min.js"></script>
+
+<link rel="stylesheet" href="/bower_components/jqcloud2/dist/jqcloud.min.css">
+
+<dom-module id="wordcloud-element">
+
+<template>
+    <style type="text/css">
+      .top-bar {
+          width: 100%;
+          background-color: #3C6E71 !important;
+          color: white;
+          text-align: center;
+          height: 35px;
+          line-height: 35px;
+          border-radius: 5px 5px 0 0;
+      }
+      #keywords {
+        height: 200px;
+      }
+      #keywords1 {
+        height: 200px;
+      }
+      #keywords2 {
+        height: 200px;
+      }
+
+    </style>
+
+    <!-- Shadow DOM -->
+    <paper-material elevation="1">
+        <div class="top-bar">
+            <iron-icon icon="{{icon}}"></iron-icon>
+            <span>{{title}}</span>
+        </div>
+        <div id="keywords{{id}}">
+        </div>
+        
+        <div style="width:100%; clear: both"></div>
+    </paper-material>
+
+  </template>
+
+<script>
+
+Polymer({
+
+      is: 'wordcloud-element',
+
+      properties: {
+
+       icon: {
+          type: String,
+          value: "face"
+        },
+
+        data:{
+          type: Object,
+          observer: '_dataChanged'
+        },
+
+        aggkey: {
+          type: String
+        },
+
+        title: {
+          type: String,
+          value: "wordcloud"
+        },
+        id:{
+          type: String
+        }
+      },
+
+      ready: function() {   
+        console.log(this.aggkey)
+       
+      },
+      _dataChanged: function(){
+        //console.log(this.data)
+        var hits = this.data.aggregations[this.aggkey].buckets;
+        var selected = 0;
+        var words = []
+        hits.forEach(function(entry) {
+          //console.log(entry)
+          if (entry.key != 'restauranteslateral' && entry.key != 'rest_lateral'){
+            words.push({'text': entry.key, 'weight' : entry.doc_count})
+          }
+        });
+        //console.log(words)
+        var that = this;
+        var selector = '#keywords'+that.id;
+        //console.log(selector)
+        if (selector == "#keywords1"){
+          //console.log(1)
+          $('#keywords1').jQCloud(words);
+        }
+        else  $('#keywords2').jQCloud(words);
+      }
+});
+</script>

@@ -1,0 +1,19 @@
+{
+  "name": "wordcloud-element",
+  "authors": [
+    "gsi-upm"
+  ],
+  "description": "Wordcloud for polymer",
+  "main": "Wordcloud.html",
+  "keywords": [
+    "web-component",
+    "elasticsearch",
+    "polymer"
+  ],
+  "dependencies": {
+    "jqcloud2": "jqcloud2#2.0.3",
+    "polymer": "polymer#1.7.0"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://lab.cluster.gsi.dit.upm.es/sefarad/wordcloud"
+}

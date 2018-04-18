@@ -2,22 +2,21 @@
 Use cases
 =========
 
-In this documentation we are going to show some uses of Soneti toolkit using the orchestrator.
+In this documentation we are going to show some uses of Soneti toolkit.
 
-First of all, you need to create a python script named `orchestrator.py` on root folder and add our dependencies:
+SOMEDI: Social Media and Digital Interaction Intelligence
+---------------------------------------------------------
 
-.. sourcecode:: python
+This use case is part of the SOMEDI project. In this use case we are going to track Restaurantes Lateral brand on social media.
 
-    import luigi
-    from luigi.contrib.esindex import CopyToIndex
-    from orchestrator.SenpyAnalysis import SenpyAnalysis
-    from orchestrator.GSICrawlerScraper import GSICrawlerScraper
-    from orchestrator.CopyToFuseki import CopyToFuseki
+We are going to describe this use case in different incremental phases.
 
-Use case 1: Use GSICrawler to get some news
--------------------------------------------
+I. Use GSICrawler to get tweets and Facebook posts from official accounts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This use case is going to retrieve the latest news on CNN newspaper about Trump, for doing so is necessary to add some lines to our python script created before:
+This phase gets tweets and Facebook posts from official accounts and shows results printed.
+
+Below is the detailed part of the task located on `somedi-usecase/workflow.py`.
 
 .. sourcecode:: python 
 
@@ -31,19 +30,27 @@ This use case is going to retrieve the latest news on CNN newspaper about Trump,
         def output(self):
             return luigi.LocalTarget(path='/tmp/_scrapy-%s.json' % self.id)
 
-As shown in the code we select as endpoint our GSICrawler service and other parameters are going to be given by command line.
+As shown in the code we select as endpoint our GSICrawler demo service and other parameters are going to be given by command line.
 
-Run the orchestrator:
+Run the orchestrator's workflow to retrieve the 10 latests tweets:
 
 .. sourcecode:: bash 
 
-	$ docker-compose exec orchestrator python -m luigi --module orchestrator ScrapyTask --query Trump --number 10 --source cnn --id 1
+	$ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow ScrapyTask --query rest_lateral --number 10 --source twitter --id 1
+
+Now run the orchestrator's workflow to retrieve the 10 latests facebook posts, the query must be the official account name on Facebook without @:
+
+.. sourcecode:: bash 
+
+    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow ScrapyTask --query restauranteslateral --number 10 --source facebook --id 2
 
 
-Use case 2: Use GSICrawler to get some tweets, and analyse sentiments with Senpy
---------------------------------------------------------------------------------
+II. Analyse collected tweets and Facebook posts with Senpy
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This use case improve the use case 1 adding analysis with Senpy. In addition, we change the data source from CNN newspaper to Twitter. Modify the python script adding this lines:
+This phase improve the previous one adding analysis with Senpy.
+
+Below is the detailed part of the task located on `somedi-usecase/workflow.py`.
 
 .. sourcecode:: python 
 
@@ -53,12 +60,9 @@ This use case improve the use case 1 adding analysis with Senpy. In addition, we
        id = luigi.Parameter()
        number =luigi.Parameter()
        source = luigi.Parameter()
-
        host = 'http://senpy:5000/api/'
-     
-       algorithm = 'sentiment140'
-     
-       lang = 'en'
+       algorithm = luigi.Parameter()
+       lang = luigi.Parameter()
      
        def requires(self):
            return ScrapyTask(self.id,self.query,self.number,self.source)
@@ -68,16 +72,24 @@ This use case improve the use case 1 adding analysis with Senpy. In addition, we
 
 As shown in the code we select as endpoint our Senpy service and other parameters are going to be given by command line.
 
-Run again the orchestrator:
+You must select what Senpy's algorithm and language are going to be used in the analysis.
+
+Run again the orchestrator's workflow using sentiment140 plugin in spanish:
 
 .. sourcecode:: bash 
 
-	$ docker-compose exec orchestrator python -m luigi --module orchestrator AnalysisTask --query Trump --number 10 --source twitter --id 2
+	$ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow AnalysisTask --query restauranteslateral --number 10 --source facebook --algorithm sentiment140 --lang es --id 3
 
-Use case 3: Use GSICrawler to get some tweets, analyse sentiments with Senpy and store results on Fuseki and Elasticsearch
---------------------------------------------------------------------------------------------------------------------------
+.. sourcecode:: bash 
 
-This use case improve use case 2 adding a persistence layer to store results. Modify the python script adding this lines:
+    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow AnalysisTask --query rest_lateral --number 10 --source twitter --algorithm sentiment140 --lang es --id 4
+
+III. Store collected and analysed tweets on Fuseki and Elasticsearch
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This phase improve the previous one adding a persistence layer to store results. 
+
+Below is the detailed part of the task located on `somedi-usecase/workflow.py`.
 
 .. sourcecode:: python 
 
@@ -87,6 +99,8 @@ This use case improve use case 2 adding a persistence layer to store results. Mo
         query = luigi.Parameter()
         number = luigi.Parameter()
         source = luigi.Parameter()
+        algorithm = luigi.Parameter()
+        lang = luigi.Parameter()
         host = 'fuseki'
         port = 3030
 
@@ -102,8 +116,10 @@ This use case improve use case 2 adding a persistence layer to store results. Mo
         query = luigi.Parameter()
         number = luigi.Parameter()
         source = luigi.Parameter()
-        index = 'soneti'
-        doc_type = 'news'
+        algorithm = luigi.Parameter()
+        lang = luigi.Parameter()
+        index = 'somedi'
+        doc_type = 'lateral'
         host = 'elasticsearch'
         port = 9200
         timeout = 100
@@ -117,15 +133,40 @@ This use case improve use case 2 adding a persistence layer to store results. Mo
         query = luigi.Parameter()
         number = luigi.Parameter()
         source = luigi.Parameter()
+        algorithm = luigi.Parameter()
+        lang = luigi.Parameter()
 
         def requires(self):
             yield FusekiTask(self.id, self.query, self.number)
             yield Elasticsearch(self.id, self.query, self.number)
 
-Run again the orchestrator:
+Run again the orchestrator's workflow:
 
 .. sourcecode:: bash 
 	
-	$ docker-compose exec orchestrator python -m luigi --module GSICrawler StoreTask --query Trump --number 10 --source cnn --id 3
+	$ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query restauranteslateral --number 10 --source facebook --algorithm sentiment140 --lang es --id 5
+
+    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query rest_lateral --number 10 --source twitter --algorithm sentiment140 --lang es --id 6
 
 Now your data is available on elasticsearch and fuseki.
+
+IV. Show stored data in a Sefarad dashboard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Open a web browser and navigate to Sefarad environment on http://localhost:8080. This intectactive dashboard shows tweets and Facebook posts collected and analysed on the previous phase. We can distinguish between posts created by the official account and replies.
+
+V. Use GSICrawler to track direct competitors
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This phase track other food restaurants chains. In this example we will track 100 Montaditos. We modify our orchestrator's workflow parameters and run it again:
+
+.. sourcecode:: bash 
+    
+    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query 100MontaditosSpain --number 10 --source facebook --algorithm sentiment140 --lang es --id 7
+
+    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query 100montaditos --number 10 --source twitter --algorithm sentiment140 --lang es --id 7
+
+Sefarad dashboard now is updated with new analysed data talking about 100 Montaditos.
+    
+
+

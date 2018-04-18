@@ -1,8 +1,8 @@
-============
-Installation
-============
+===========
+Quick start
+===========
 
-Soneti's installation is quite easy and in a few steps you can have the toolkit installed and ready to use.
+Soneti's services installation is quite easy and in a few steps you can have a demo services working.
 First of all it is necessary to clone the GitLab repository:
 
 .. sourcecode:: bash
@@ -17,11 +17,12 @@ Now images are ready to run:
 
     $ docker-compose up --build
 
-Check Senpy service is working on http://localhost:8000, GSICrawler service is working on http://localhost:5000 and Sefarad is working on http://localhost:8080
+This installation offers a basic version of each service:
 
-Also is necessary to initialize Fuseki dataset in order to be able to store some data. Browse to http://localhost:3030/manage.html?tab=new-dataset. User and password required are admin and fusekisoneti respectively.
+* **GSICrawler:** This ingestion service demo has CNN, New York Times, ElMundo, Facebook and Twitter as possible sources. This service is available on http://localhost:5000
 
-Name the dataset default and select Persistent option. Click on create dataset button.
+* **Senpy**: This analysis service demo has sentiment140 as sentiment analysis plugin and EmoRand as emotion analysis plugin. This service is available on http://localhost:8000/
 
-Now your Soneti toolkit is ready to work.
+* **Sefarad**: This visualization demo environment provides a dashboard for Somedi project and is available on http://localhost:8080.
 
+* **Orchestrator**: Luigi provides a web interface to check your workflows status on http://localhost:8082

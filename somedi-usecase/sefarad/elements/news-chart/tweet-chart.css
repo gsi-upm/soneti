@@ -1,0 +1,103 @@
+:host {
+  margin: 0;
+  padding: 0;
+  width: 400px;
+  height: 300px;
+}
+
+.top-bar{
+  width: 100%; 
+  background-color: #04419B;  
+  color: white; 
+  text-align: center; 
+  height: 35px; 
+  line-height: 35px;
+}
+
+.emotion{
+  text-align: center;
+}
+
+.headline{
+  text-align: left;
+}
+
+.emotion-box{
+  padding-top: 2%;
+}
+
+.see-more{
+  padding-top: 0%;
+}
+
+.neutral-emotion{
+  color: #F7EA2A;
+}
+
+.negative-fear{
+  color: #054990;
+}
+
+.sadness{
+  color: #395EAD;
+}
+
+.joy{
+  color: #75B84C;
+}
+
+.disgust{
+  color: #E0901B;
+}
+
+.anger{
+  color: #C81F1D;
+}
+
+.top-bar span {
+  vertical-align: middle;
+}
+
+paper-icon-button.green {
+  color: var(--paper-green-500);
+}
+
+paper-icon-button.green:hover {
+  background: var(--paper-green-50);
+  border-radius: 50%;
+}
+
+.tweet {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.positive {
+  background: rgba(76, 175, 80, .5);
+}
+
+.negative {
+  background: rgba(255, 82, 82, .5);
+}
+
+.neutral {
+  background: rgba(96, 125, 139, .5);;
+}
+
+.positive-news {
+  background: rgba(76, 175, 80, .2);
+}
+
+.negative-news {
+  background: rgba(255, 82, 82, .2);
+}
+
+.neutral-news {
+  background: rgba(96, 125, 139, .2);;
+}
+
+.text {
+  font-size: 17px;
+  font-weight: bold;
+}

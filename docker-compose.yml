@@ -26,9 +26,23 @@ services:
     ports:
       - "3030:3030"
     volumes:
-     - fusekidata:/fuseki
+     - ./fuseki:/fuseki
     environment:
       - ADMIN_PASSWORD=fusekisoneti
+    networks:
+      - soneti
+
+  sefarad:
+    build: ./somedi-usecase/sefarad/
+    ports:
+     - "8080:8080"
+    environment:
+      - ES_ENDPOINT_EXTERNAL=http://localhost:9200
+      - FUSEKI_ENDPOINT_EXTERNAL=localhost:3030
+    volumes:
+      - ./somedi-usecase/sefarad/:/usr/src/app
+    depends_on:
+      - gsicrawler
     networks:
       - soneti
 
@@ -56,8 +70,8 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data/
     ports:
-      - 19200:9200
-      - 19300:9300
+      - 9200:9200
+      - 9300:9300
     networks:
       - soneti
 
@@ -72,5 +86,4 @@ networks:
 
 volumes:
   esdata:
-  fusekidata:
 

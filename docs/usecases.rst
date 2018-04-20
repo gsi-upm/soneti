@@ -36,7 +36,7 @@ Run the orchestrator's workflow to retrieve the 10 latests tweets:
 
 .. sourcecode:: bash 
 
-	$ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow ScrapyTask --query rest_lateral --number 10 --source twitter --id 1
+    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow ScrapyTask --query rest_lateral --number 10 --source twitter --id 1
 
 Now run the orchestrator's workflow to retrieve the 10 latests facebook posts, the query must be the official account name on Facebook without @:
 
@@ -78,7 +78,7 @@ Run again the orchestrator's workflow using sentiment140 plugin in spanish:
 
 .. sourcecode:: bash 
 
-	$ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow AnalysisTask --query restauranteslateral --number 10 --source facebook --algorithm sentiment140 --lang es --id 3
+    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow AnalysisTask --query restauranteslateral --number 10 --source facebook --algorithm sentiment140 --lang es --id 3
 
 .. sourcecode:: bash 
 
@@ -143,8 +143,8 @@ Below is the detailed part of the task located on `somedi-usecase/workflow.py`.
 Run again the orchestrator's workflow:
 
 .. sourcecode:: bash 
-	
-	$ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query restauranteslateral --number 10 --source facebook --algorithm sentiment140 --lang es --id 5
+    
+    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query restauranteslateral --number 10 --source facebook --algorithm sentiment140 --lang es --id 5
 
     $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query rest_lateral --number 10 --source twitter --algorithm sentiment140 --lang es --id 6
 
@@ -164,9 +164,6 @@ This phase track other food restaurants chains. In this example we will track 10
     
     $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query 100MontaditosSpain --number 10 --source facebook --algorithm sentiment140 --lang es --id 7
 
-    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query 100montaditos --number 10 --source twitter --algorithm sentiment140 --lang es --id 7
+    $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query 100montaditos --number 10 --source twitter --algorithm sentiment140 --lang es --id 8
 
 Sefarad dashboard now is updated with new analysed data talking about 100 Montaditos.
-    
-
-

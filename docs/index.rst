@@ -6,9 +6,9 @@
 Welcome to Soneti's documentation!
 ==================================
 
-**Soneti** is a toolkit for **analyzing social media**, such as social networks (e.g. Twitter, Facebook, ...), blogs, YouTube, Newspapers, AppStores, etc.. 
+**Soneti** is a toolkit for **analyzing social media**, such as social networks (e.g. Twitter, Facebook, ...), blogs, YouTube, Newspapers, AppStores, etc..
 
-It obtains data from different sources, in addition it enriches this obtained data by performing different types of automatic analysis. Finally, it allows us to visualize the data obtained in interactive dashboards.
+Soneti provide services to obtain data from different web services, perfom different of analysis in order to enrich extracted data and visualize this analysis results in interactive dashboards.
 
 .. figure:: figures/soneti.png
    :alt: Soneti overview

@@ -19,6 +19,10 @@ Now images are ready to run:
 
 This installation offers a basic version of each service:
 
+.. figure:: figures/quickstart.png
+   :alt: Soneti demo overview
+
+
 * **GSICrawler:** This ingestion service demo has CNN, New York Times, ElMundo, Facebook and Twitter as possible sources. This service is available on http://localhost:5000
 
 * **Senpy**: This analysis service demo has sentiment140 as sentiment analysis plugin and EmoRand as emotion analysis plugin. This service is available on http://localhost:8000/

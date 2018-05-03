@@ -39,6 +39,11 @@ Now run the orchestrator's workflow to retrieve the 10 latests facebook posts, t
 
     $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow ScrapyTask --query restauranteslateral --number 10 --source facebook --id 2
 
+Below you can see the services involved in this phase:
+
+.. figure:: figures/tutorial/tutorial1.png
+   :alt: Tutorial phase 1
+
 
 II. Analyse collected tweets and Facebook posts with Senpy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,6 +83,11 @@ Run again the orchestrator's workflow using sentiment140 plugin in spanish:
 .. sourcecode:: bash 
 
     $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow AnalysisTask --query rest_lateral --number 10 --source twitter --algorithm sentiment140 --lang es --id 4
+
+Below you can see the services involved in this phase:
+
+.. figure:: figures/tutorial/tutorial2.png
+   :alt: Tutorial phase 2
 
 III. Store collected and analysed tweets on Fuseki and Elasticsearch
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,6 +152,11 @@ Run again the orchestrator's workflow:
     $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query restauranteslateral --number 10 --source facebook --algorithm sentiment140 --lang es --id 5
 
     $ docker-compose exec orchestrator python -m luigi --module somedi-usecase.workflow StoreTask --query rest_lateral --number 10 --source twitter --algorithm sentiment140 --lang es --id 6
+
+Below you can see the services involved in this phase:
+
+.. figure:: figures/tutorial/tutorial3.png
+   :alt: Tutorial phase 3
 
 Now your data is available on elasticsearch and fuseki.
 

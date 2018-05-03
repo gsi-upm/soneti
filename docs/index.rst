@@ -18,8 +18,9 @@ Soneti provide services to obtain data from different web services, perfom diffe
    :caption: Contents:
 
    what-is-soneti
-   installation
    usecases
+   installation
+   configuration
    conventions
 ..   uses-soneti
    

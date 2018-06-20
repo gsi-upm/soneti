@@ -5,3 +5,4 @@ requests
 sqlalchemy 
 ftfy 
 rdflib-jsonld
+soneti_tasks

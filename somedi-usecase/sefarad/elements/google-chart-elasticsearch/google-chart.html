@@ -545,12 +545,12 @@ Data can be provided in one of three ways:
                 datos[fechacompleta]['propio'] = datos[fechacompleta]['propio'] + 1
               } else  datos[fechacompleta]['propio'] = 1
             }
-            else if(entry._source['schema:creator'] != ('rest_lateral' || 'restauranteslateral')){
+            else if(entry._source['schema:creator'] != ('rest_lateral' || 'restauranteslateral' || '100montaditos' || '100MontaditosSpain')){
               if (datos[fechacompleta].hasOwnProperty('otro')){
                 datos[fechacompleta]['otro'] = datos[fechacompleta]['otro'] + 1
               } else  datos[fechacompleta]['otro'] = 1
             }
-            if(entry._source['schema:author'] == 'facebook'){
+            if(entry._source['schema:creator'] == 'restauranteslateral'){
               if (datos[fechacompleta].hasOwnProperty('otro')){
                 //console.log( entry._source['comments']['data'].length)
                 datos[fechacompleta]['otro'] = datos[fechacompleta]['otro'] + entry._source['comments']['data'].length
@@ -570,12 +570,12 @@ Data can be provided in one of three ways:
                 datos[fechacompleta]['propio'] = datos[fechacompleta]['propio'] + 1
               } else  datos[fechacompleta]['propio'] = 1
             }
-            else if(entry._source['schema:creator'] != ('rest_lateral' || 'restauranteslateral')){
+            else if(entry._source['schema:creator'] != ('rest_lateral' || 'restauranteslateral' || '100montaditos' || '100MontaditosSpain')){
               if (datos[fechacompleta].hasOwnProperty('otro')){
                 datos[fechacompleta]['otro'] = datos[fechacompleta]['otro'] + 1
               } else  datos[fechacompleta]['otro'] = 1
             }
-            if(entry._source['schema:author'] == 'facebook'){
+            if(entry._source['schema:creator'] == 'restauranteslateral'){
               if (datos[fechacompleta].hasOwnProperty('otro')){
                 //console.log( entry._source['comments']['data'].length)
                 datos[fechacompleta]['otro'] = datos[fechacompleta]['otro'] + entry._source['comments']['data'].length

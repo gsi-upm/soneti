@@ -160,7 +160,7 @@
           if (that.type == 'official'){
             if((entry._source['schema:creator'] == 'rest_lateral') || (entry._source['schema:creator'] == 'restauranteslateral')) results.push(entry._source);
           } else {
-            if((entry._source['schema:creator'] != 'rest_lateral') && (entry._source['schema:creator'] != 'restauranteslateral')) results.push(entry._source);
+            if((entry._source['schema:creator'] != 'rest_lateral') && (entry._source['schema:creator'] != 'restauranteslateral') && (entry._source['schema:creator'] != '100montaditos') && (entry._source['schema:creator'] != '100MontaditosSpain')) results.push(entry._source);
           }
         });
         //console.log(results)

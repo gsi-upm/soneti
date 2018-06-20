@@ -1,8 +1,8 @@
 import luigi
 from luigi.contrib.esindex import CopyToIndex
-from orchestrator.SenpyAnalysis import SenpyAnalysis
-from orchestrator.GSICrawlerScraper import GSICrawlerScraper
-from orchestrator.CopyToFuseki import CopyToFuseki
+from soneti_tasks.SenpyAnalysis import SenpyAnalysis
+from soneti_tasks.GSICrawlerScraper import GSICrawlerScraper
+from soneti_tasks.CopyToFuseki import CopyToFuseki
 
 
 class ScrapyTask(GSICrawlerScraper):

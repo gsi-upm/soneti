@@ -59,7 +59,7 @@ class ElasticsearchTask(CopyToIndex):
     algorithm = luigi.Parameter()
     lang = luigi.Parameter()
     index = 'somedi'
-    doc_type = 'lateral'
+    doc_type = luigi.Parameter()
     host = 'elasticsearch'
     port = 9200
     timeout = 100
@@ -75,7 +75,9 @@ class StoreTask(luigi.Task):
     source = luigi.Parameter()
     algorithm = luigi.Parameter()
     lang = luigi.Parameter()
+    doc_type = luigi.Parameter()
+
 
     def requires(self):
         yield FusekiTask(self.id, self.query, self.number, self.source, self.algorithm,self.lang)
-        yield ElasticsearchTask(self.id, self.query, self.number, self.source, self.algorithm,self.lang)
+        yield ElasticsearchTask(self.id, self.query, self.number, self.source, self.algorithm,self.lang,self.doc_type)

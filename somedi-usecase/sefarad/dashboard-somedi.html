@@ -32,8 +32,8 @@
       <img style="width: 30%;  margin:0 auto;"src="/images/somedi.png">
     </div>
   <paper-tabs selected="{{selected}}">
-      <paper-tab>Dashboard</paper-tab>
-      <!-- <paper-tab>Sparql Editor</paper-tab> -->
+      <paper-tab>Brand Overview</paper-tab>
+      <paper-tab>Competitors Comparision</paper-tab>
       <paper-tab>About</paper-tab>
     </paper-tabs>
 
@@ -258,7 +258,7 @@
       _clientChanged: function() {
         //console.log("ClientChanged");
         ready = true;
-        this._query();
+        this._querylateral();
       },
       getPeople: function(data){
         var people = []
@@ -324,7 +324,7 @@
         }
         else {
           this.push('filters', {terms: {'schema:articleBody': [this.query]}});
-          this._ESsearch()
+          this._query()
         }
       },
       _filtersChange: function() {
@@ -332,137 +332,15 @@
           console.log("default search fired")
           console.log("filters: "+this.filters);
           console.log("query: "+this.query);
-          this._query()
+          this._querylateral()
         }
         else {
           console.log(this.query);
           console.log(this.filters);
-          this._query()
+          this._querylateral()
         }
        },
-      _ESsearch: function() {
-        console.log("_ESsearch")
-        var that = this;
-        //console.log("Ready?: ", ready);
-        if(ready){
-          this.client.search({
-          // undocumented params are appended to the query string
-          index: "somedi",
-          body: {
-            size: 500,
-            query: {
-              multi_match:{
-                query: this.query,
-                fields: ['schema:author', 'schema:headline', 'marl:hasPolarity', 'schema:about', 'entities.nif:anchorOf']
-              }
-            },
-            sort:{'schema:datePublished':{order: "asc"}},
-            aggs: {
-             type: {
-               terms: {
-                 field: "@type.keyword",
-                 order: {
-                   _count: "desc"
-                 }
-               }
-             },
-             'schema:author': {
-               terms: {
-                 field: "schema:author.keyword",
-                 order: {
-                   _count: "desc"
-                 }
-               }
-             },
-             'schema:creator': {
-               terms: {
-                 field: "schema:creator.keyword",
-                 order: {
-                   _count: "desc"
-                 }
-               }
-             },
-             'comments.data.from.name': {
-               terms: {
-                 field: "comments.data.from.name.keyword",
-                 order: {
-                   _count: "desc"
-                 }
-               }
-             },
-             'entities.rdfs:subClassOf': {
-               terms: {
-                 field: "entities.rdfs:subClassOf.keyword",
-                 size: 20,
-                 order: {
-                   _count: "desc"
-                 } 
-               }
-             },
-            'schema:search': {
-               terms: {
-                 field: "schema:search.keyword",
-                 size: 20,
-                 order: {
-                   _count: "desc"
-                 } 
-               }
-             },
-             'topics.rdfs:subClassOf': {
-               terms: {
-                 field: "topics.rdfs:subClassOf.keyword",
-                 size: 20,
-                 order: {
-                   _count: "desc"
-                 } 
-               }
-             },
-             'sentiments.marl:hasPolarity': {
-               terms: {
-                 field: "sentiments.marl:hasPolarity.keyword",
-                 size: 20,
-                 order: {
-                   _count: "desc"
-                 } 
-               }
-             },
-           sentiment: {
-             terms: {
-             field: "sentiments.marl:hasPolarity.keyword",
-             order: {
-               _count: "desc"
-               }
-             }
-             },
-          emotion: {
-              terms: {
-              field: "emotions.onyx:hasEmotion.onyx:hasEmotionCategory.keyword",
-             order: {
-               _count: "desc"
-                     }      
-                   }
-      },
-      'schema:datePublished': {
-              date_histogram : {
-                field : "schema:datePublished",
-                format: "dd-MM-yyyy",
-                interval : "month"
-            }
-       }
-        }
-      } 
-          }).then(function (resp) {
-            var myids = []
-            resp.hits.hits.forEach(function(entry){myids.push(entry._id)})
-            that.ids = myids;
-            //console.log(that.ids)
-            that.data = resp;
-            //console.log(that.data);
-            
-            });
-        }
-      },
-       _query: function() {
+       _querylateral: function() {
         //console.log("_query")
         var that = this;
         //console.log("Ready?: ", ready);
@@ -470,6 +348,7 @@
           this.client.search({
           // undocumented params are appended to the query string
           index: "somedi",
+          type: "lateral",
           body: {
             size: 500,
             query: {
@@ -477,7 +356,7 @@
                 must: this.filters,
               }
             },
-            sort:{'schema:datePublished':{order: "asc"}},
+            sort:{'schema:datePublished':{order: "desc"}},
             aggs: {
              type: {
                terms: {

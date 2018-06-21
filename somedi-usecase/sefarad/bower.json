@@ -40,7 +40,9 @@
     "leaflet": "^1.0.3",
     "Leaflet.EasyButton": "^2.2.0",
     "leaflet.markercluster": "^1.0.5",
-    "jqcloud2": "jqcloud2#2.0.3"
+    "jqcloud2": "jqcloud2#2.0.3",
+    "paper-checkbox": "paper-checkbox#1.1.1",
+    "paper-listbox": "paper-listbox#*"
   },
   "resolutions": {
     "webcomponentsjs": "0.7.24",

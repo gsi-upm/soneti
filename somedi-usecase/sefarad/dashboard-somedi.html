@@ -11,9 +11,15 @@
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/bower_components/paper-item/paper-item.html">
 <link rel="import" href="/bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="/bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="/elements/entities-chart/entities-chart.html">
 <link rel="import" href="/elements/news-chart/news-chart.html">
 <link rel="import" href="/elements/wordcloud/wordcloud.html">
+
+<link rel="import" href="/elements/google-chart-elasticsearch/google-chart-comparison.html">
+<link rel="import" href="/elements/competitors-selector/competitors-selector.html">
 
 
 <dom-module id="dashboard-somedi">
@@ -55,8 +61,6 @@
               title="Tweets"
               data="{{data}}">
             </number-chart>
-          </div>
-          <div class="col-md-6">
             <number-chart 
               data="{{data}}"
               stylebg="bg-facebook"
@@ -67,6 +71,29 @@
               icon="/images/facebook-white.png"
               subtitle="Total elements">
             </number-chart>
+            <number-chart 
+              data="{{data}}"
+              stylebg="bg-tripadvisor"
+              object="Tripadvisor"
+              aggKey="schema:author"
+              title="Tripadvisor reviews"
+              filters="{{filters}}"
+              icon="/images/facebook-white.png"
+              subtitle="Total elements">
+            </number-chart>
+          </div>
+          <div class="col-md-6">
+            <google-chart
+              field="schema:author"
+              data="{{data}}"             
+              id='barsentiment'
+              extra-id='1'
+              type='pie'
+              filters="{{filters}}"
+              icon='social:people'
+              options='{"title": "Sources"}'
+              cols='[{"label": "Sentiment", "type": "string"},{"label": "Count", "type": "number"}]'>
+            </google-chart> 
           </div>
          </div>
          <br> 
@@ -81,21 +108,11 @@
               filters="{{filters}}"
               icon='social:mood'
               options='{"title": "Sentiments"}'
-              cols='[{"label": "Sentiment", "type": "string"},{"label": "Count", "type": "number"}]'
+              cols='[{"label": "Sentiment", "type": "string"},{"label": "Count", "type": "number"}]'>
             </google-chart>  
           </div>
           <div class="col-md-6">
-            <google-chart
-              field="schema:author"
-              data="{{data}}"             
-              id='barsentiment'
-              extra-id='1'
-              type='pie'
-              filters="{{filters}}"
-              icon='social:people'
-              options='{"title": "Sources"}'
-              cols='[{"label": "Sentiment", "type": "string"},{"label": "Count", "type": "number"}]'
-            </google-chart> 
+
           </div>
         </div>
         <br> 
@@ -182,8 +199,34 @@
          endpoint="http:///localhost:3030/default/query"
          queries="{{queries}}"
         </yasgui-ui>
+
+        <yasgui-ui
+         endpoint="http:///${FUSEKI_ENDPOINT_EXTERNAL}/default/query"
+         queries="{{queries}}"
+        </yasgui-ui>
     </div>
     -->
+    <div>
+      <competitors-selector competitors="{{competitors}}"></competitors-selector>
+      <br>
+      <div class="row"> 
+        <div class="col-md-12">
+          <google-chart-comparison
+            field="schema:datePublished"
+            data="{{datacompetitors}}"             
+            id='line-chart'
+            extra-id='line-chart'
+            type='area'
+            filters="{{filters}}"
+            icon='icons:trending-up'
+            optionsbi='{"colors": ["#00C0EF", "#DD4B39", "#90ba3e","#da8709"], "explorer": { "actions": ["dragToZoom", "rightClickToReset"], "axis": "horizontal", "keepInBounds": true, "maxZoomIn": 10.0}}'
+            options='{"title": "Posts and Comments per brand"}'
+            comparison="{{competitors}}"
+          </google-chart-comparison>
+         </div>
+        </div> 
+
+    </div>
     <div>
         This demo shows Soneti functionalities in the context of the project Somedi. The presented demo is the result of the ingest of the crawled online data and posterior analysis and semantic augmentation of said data. The resulting information is stored in both ElastiSearch and Fuseki databases, which allows the user to consult the data is a variety of forms, as showed. 
     </div>
@@ -220,6 +263,14 @@
         data:{
           type: Object
         },
+        datacompetitors:{
+          type: Object
+        },
+        competitors:{
+          type: Array,
+          notify: true,
+          value: function() { return []; }
+        },
         client: {
           type: Object,
           notify: true,
@@ -238,11 +289,15 @@
           type: Array,
           notify: true,
           value: function() { return []; }
+        },
+        selectedelement: {
+          type: Object
         }
       },
     
       observers: [
-      '_filtersChange(filters.*)'
+      '_filtersChange(filters.*)',
+      '_competitorsChange(competitors.*)'
       ],
       behaviors: [
         Polymer.IronA11yKeysBehavior
@@ -252,13 +307,20 @@
       },
 
       ready: function(){
-        //console.log("ready");
-      },
 
+      },
+      _competitorsChange: function(){
+        //console.log(this.competitors)
+      },
+      getData: function(data,datamontaditos){
+        //console.log([data,datamontaditos])
+        return [data,datamontaditos]
+      },
       _clientChanged: function() {
         //console.log("ClientChanged");
         ready = true;
         this._querylateral();
+        this._querycompetitors();
       },
       getPeople: function(data){
         var people = []
@@ -457,6 +519,127 @@
             that.ids = myids;
             //console.log(that.ids)
             that.data = resp;
+            //console.log(that.data);
+            
+            });
+        }
+      },
+      _querycompetitors: function() {
+        //console.log("_query")
+        var that = this;
+        //console.log("Ready?: ", ready);
+        if(ready){
+          this.client.search({
+          // undocumented params are appended to the query string
+          index: "somedi",
+          body: {
+            size: 2000,
+            query: {
+              bool: {
+                must: this.filters,
+              }
+            },
+            sort:{'schema:datePublished':{order: "desc"}},
+            aggs: {
+             type: {
+               terms: {
+                 field: "@type.keyword",
+                 order: {
+                   _count: "desc"
+                 }
+               }
+             },
+             'schema:author': {
+               terms: {
+                 field: "schema:author.keyword",
+                 order: {
+                   _count: "desc"
+                 }
+               }
+             },
+             'comments.data.from.name': {
+               terms: {
+                 field: "comments.data.from.name.keyword",
+                 order: {
+                   _count: "desc"
+                 }
+               }
+             },
+             'schema:creator': {
+               terms: {
+                 field: "schema:creator.keyword",
+                 order: {
+                   _count: "desc"
+                 }
+               }
+             },
+             'sentiments.marl:hasPolarity': {
+               terms: {
+                 field: "sentiments.marl:hasPolarity.keyword",
+                 size: 20,
+                 order: {
+                   _count: "desc"
+                 } 
+               }
+             },
+             'entities.rdfs:subClassOf': {
+               terms: {
+                 field: "entities.rdfs:subClassOf.keyword",
+                 size: 20,
+                 order: {
+                   _count: "desc"
+                 } 
+               }
+             },
+             'schema:search': {
+               terms: {
+                 field: "schema:search.keyword",
+                 size: 20,
+                 order: {
+                   _count: "desc"
+                 } 
+               }
+             },
+             'topics.rdfs:subClassOf': {
+               terms: {
+                 field: "topics.rdfs:subClassOf.keyword",
+                 size: 20,
+                 order: {
+                   _count: "desc"
+                 } 
+               }
+             },
+           sentiment: {
+             terms: {
+             field: "sentiments.marl:hasPolarity.keyword",
+             order: {
+               _count: "desc"
+               }
+             }
+             },
+          emotion: {
+              terms: {
+              field: "emotions.onyx:hasEmotion.onyx:hasEmotionCategory.keyword",
+             order: {
+               _count: "desc"
+                     }      
+                   }
+      },
+      'schema:datePublished': {
+              date_histogram : {
+                field : "schema:datePublished",
+                format: "dd-MM-yyyy",
+                interval : "month"
+            }
+       }
+       }
+      } 
+          }).then(function (resp) {
+            var myids = []
+            resp.hits.hits.forEach(function(entry){myids.push(entry._id)})
+            that.ids = myids;
+            //console.log(that.ids)
+            that.datacompetitors = resp;
             //console.log(that.data);
             
             });

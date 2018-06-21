@@ -1,0 +1,41 @@
+<dom-module id="competitors-selector">
+<style is="custom-style">
+  @import url("../../styles/app-theme.html");
+</style>
+<template>
+  <paper-material elevation="1">
+
+
+     <div class="row"> 
+        <div class="col-md-2"><paper-item><strong>Select Competitors:</strong></paper-item></div>
+        <div class="col-md-2"><paper-item><paper-checkbox id="montaditos" on-change="_selectionChange">100 Montaditos</paper-checkbox></paper-item></div>
+        <div class="col-md-2"><paper-item><paper-checkbox id="surena"on-change="_selectionChange">La Sureña</paper-checkbox></paper-item></div>
+        <div class="col-md-2"><paper-item><paper-checkbox id="lizarran" on-change="_selectionChange">Lizarrán</paper-checkbox></paper-item></div>
+      </div>
+  </paper-material>
+</template>
+</dom-module>
+
+<script>
+Polymer({
+    is: 'competitors-selector',
+    properties: {
+      competitors: {
+        type: Array,
+        notify: true,
+        value: function() { return []; }
+      }
+    },
+    _selectionChange: function(event){
+        var that = this;
+        //console.log(event.target.id,event.target.active);
+        if (event.target.active) this.push('competitors', event.target.id)
+        else if (!event.target.active){
+          var i = this.competitors.indexOf(event.target.id);
+          if(i != -1) {
+            this.splice('competitors', i, 1);
+          }
+        } 
+        //console.log(this.competitors)
+    }
+});

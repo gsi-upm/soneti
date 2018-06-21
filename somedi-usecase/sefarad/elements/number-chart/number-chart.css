@@ -14,10 +14,13 @@
     background-color: #00c0ef !important;
     color: white;
   }
-
   .bg-green {
     color: white;
     background-color: #00a65a !important;
+  }
+  .bg-tripadvisor {
+    color: white;
+    background-color: #00a680 !important;
   }
   .bg-facebook{
     color: white;

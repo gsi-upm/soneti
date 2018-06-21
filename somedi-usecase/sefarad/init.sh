@@ -2,7 +2,7 @@
 
 # Copy bower dependencies when using -v $PWD/:/usr/src/app
 
-envsubst < /usr/src/app/dashboard-somedi.env.html > /usr/src/app/dashboard-somedi.html || exit 1;
+#envsubst < /usr/src/app/dashboard-somedi.env.html > /usr/src/app/dashboard-somedi.html || exit 1;
 
 
 if [ -f /.dockerenv ]; then

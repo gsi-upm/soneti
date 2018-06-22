@@ -160,9 +160,9 @@
           -->
           <wordcloud-element data="{{data}}"
               id="2"
-              title="Most active Twitter users"
+              title="Most used terms"
               icon="social:people"
-              aggKey="schema:creator"></wordcloud-element>
+              aggKey="schema:articleBody"></wordcloud-element>
          </div>
       </div>
       <br> 
@@ -221,6 +221,37 @@
             icon='icons:trending-up'
             optionsbi='{"colors": ["#00C0EF", "#DD4B39", "#90ba3e","#da8709"], "explorer": { "actions": ["dragToZoom", "rightClickToReset"], "axis": "horizontal", "keepInBounds": true, "maxZoomIn": 10.0}}'
             options='{"title": "Posts and Comments per brand"}'
+            comparison="{{competitors}}"
+          </google-chart-comparison>
+         </div>
+        </div>
+      <br>
+      <div class="row"> 
+        <div class="col-md-6">
+          <google-chart-comparison
+            field="typesent"
+            data="{{datacompetitors}}"             
+            id='line-chart'
+            extra-id='line-chart'
+            type='column'
+            filters="{{filters}}"
+            icon='social:mood'
+            optionsbi='{"colors": ["#00C0EF", "#DD4B39", "#90ba3e","#da8709"], "explorer": { "actions": ["dragToZoom", "rightClickToReset"], "axis": "horizontal", "keepInBounds": true, "maxZoomIn": 10.0}}'
+            options='{"title": "Sentiment Comparison"}'
+            comparison="{{competitors}}"
+          </google-chart-comparison>
+        </div>
+        <div class="col-md-6">
+          <google-chart-comparison
+            field="typesource"
+            data="{{datacompetitors}}"             
+            id='line-chart'
+            extra-id='line-chart'
+            type='bar'
+            filters="{{filters}}"
+            icon='social:mood'
+            optionsbi='{"colors": ["#00C0EF", "#DD4B39", "#90ba3e","#da8709"], "explorer": { "actions": ["dragToZoom", "rightClickToReset"], "axis": "horizontal", "keepInBounds": true, "maxZoomIn": 10.0}}'
+            options='{"title": "Source Comparison"}'
             comparison="{{competitors}}"
           </google-chart-comparison>
          </div>
@@ -436,6 +467,17 @@
                  }
                }
              },
+             'schema:articleBody': {
+               terms: {
+                 field: "schema:articleBody",
+                 include : ".....",
+                 exclude : "http.",
+                 order: {
+                   _count: "desc"
+                 },
+                 size: 50
+               }
+             },
              'comments.data.from.name': {
                terms: {
                  field: "comments.data.from.name.keyword",
@@ -557,6 +599,28 @@
                  }
                }
              },
+             'typesent': {
+               terms: {
+                 field: "sentiments.marl:hasPolarity.keyword",
+                 order: {
+                   _count: "desc"
+                 },
+               },
+               aggs: {
+                'type' : { "terms" : { "field" : "_type" } }
+               }
+             },
+             'typesource': {
+               terms: {
+                 field: "schema:author.keyword",
+                 order: {
+                   _count: "desc"
+                 },
+               },
+               aggs: {
+                'type' : { "terms" : { "field" : "_type" } }
+               }
+             },               
              'comments.data.from.name': {
                terms: {
                  field: "comments.data.from.name.keyword",

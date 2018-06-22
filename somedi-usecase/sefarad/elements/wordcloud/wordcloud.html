@@ -83,7 +83,7 @@ Polymer({
         var selected = 0;
         var words = []
         hits.forEach(function(entry) {
-          console.log(entry)
+          //console.log(entry)
           if (entry.key != 'restauranteslateral' && entry.key != 'rest_lateral' && entry.key != '100montaditos' && entry.key != '100MontaditosSpain'){
             words.push({'text': entry.key, 'weight' : entry.doc_count})
           }

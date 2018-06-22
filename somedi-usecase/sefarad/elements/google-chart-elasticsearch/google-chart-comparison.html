@@ -48,10 +48,10 @@ Data can be provided in one of three ways:
     <div id="chartdiv" on-tap="makezoom"></div>
     <google-legacy-loader on-api-load="_readyForAction"></google-legacy-loader>
 
-    <div style="float:right">
+    <!--<div style="float:right">
       <small>Clear Filters</small>
       <paper-icon-button icon="delete" alt="menu" class="green" on-tap="removeFilters"></paper-icon-button>
-    </div>
+    </div>-->
     <div style="width:100%; clear: both"></div>
   </paper-material>
 </template>
@@ -277,7 +277,7 @@ Data can be provided in one of three ways:
       });
     },
     _comparisonChanged: function(){
-      console.log("Hello: "+this.comparison);
+      //console.log("Hello: "+this.comparison);
       this._loadData()
     },
     _typeChanged: function() {
@@ -469,7 +469,7 @@ Data can be provided in one of three ways:
     },
 
     _externalDataLoaded: function(e) {
-      console.log(e.detail.response)
+      //console.log(e.detail.response)
       var dataTable = this._createDataTable(e.detail.response);
       this._canDraw = true;
       this._dataTable = dataTable;
@@ -478,7 +478,6 @@ Data can be provided in one of three ways:
 
     _createDataTable: function(data) {
       var dataTable = null;
-      data = undefined
       var that = this;
       //console.log(this.comparison)
       // If a data object was not passed to this function, default to the
@@ -486,16 +485,14 @@ Data can be provided in one of three ways:
       // cases when the data attribute is a URL pointing to an external
       // data source.
       //console.log(data)
-      console.log('dataaaatableee')
       if (!data) {
         data = this.data;
       }
       if (!data)
         data = [];
-      if (this.filas && this.filas.length > 0 && this.cols &&
-        this.cols.length > 0) {
+      if (this.filas && this.filas.length > 0) {
         // Create the data table from cols and rows.
-      if (this.field == 'schema:datePublished'){
+        if (this.field == 'schema:datePublished'){
         var rows = []
         //console.log(this.rows)
         //console.log(this.comparison)
@@ -546,10 +543,9 @@ Data can be provided in one of three ways:
             }
         });
       this.cols = that.cols
-      console.log(this.cols)
+      //console.log(this.cols)
       this.rows = rows
-      console.log(this.rows)
-      }
+      //console.log(this.rows)
       dataTable = new google.visualization.DataTable();
       dataTable.cols = this.cols;
       for (var i = 0; i < this.cols.length; i++) {
@@ -558,6 +554,62 @@ Data can be provided in one of three ways:
       }
       dataTable.addRows(this.rows);
       } else {
+        var rows = []
+        this.filas.forEach(function(entry,index){
+          if(that.comparison.length == 0){
+            that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"}]
+            rows.push([entry[0], entry[1]])
+          }
+
+          if(that.comparison.length == 1){
+            if (that.comparison.indexOf('montaditos') > -1) {
+              that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"}, {"label": "100 Montaditos", "type": "number"}]
+              rows.push([entry[0], entry[1], entry[2]])
+
+            }
+            else if (that.comparison.indexOf('surena') > -1) {
+              that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "La Sureña", "type": "number"}]
+              rows.push([entry[0], entry[1], entry[3]])
+
+            }
+            else if (that.comparison.indexOf('lizarran') > -1) {
+              that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "Lizarrán", "type": "number"}]
+              rows.push([entry[0], entry[1], entry[4]])
+            }
+          }
+          if(that.comparison.length == 2){
+            if (that.comparison.indexOf('montaditos') < 0) {
+              that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "Sureña", "type": "number"},{"label": "Lizarrán", "type": "number"}]
+              rows.push([entry[0], entry[1], entry[3], entry[4]])
+            }
+            else if (that.comparison.indexOf('surena') < 0) {
+              that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "Montaditos", "type": "number"},{"label": "Lizarrán", "type": "number"}]
+              rows.push([entry[0], entry[1], entry[2], entry[4]])
+            }
+            else if (that.comparison.indexOf('lizarran') < 0) {
+              that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "Montaditos", "type": "number"},{"label": "Sureña", "type": "number"}]
+              rows.push([entry[0], entry[1], entry[2], entry[3]])
+            }
+          }
+
+          if(that.comparison.length == 3){
+            that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"}, {"label": "Montaditos", "type": "number"},{"label": "Sureña", "type": "number"},{"label": "Lizarrán", "type": "number"}]
+            rows.push([entry[0], entry[1], entry[2],entry[3], entry[4]])
+          }
+        });
+      console.log(this.cols)
+      console.log(rows)
+      dataTable = new google.visualization.DataTable();
+      dataTable.cols = this.cols;
+      for (var i = 0; i < this.cols.length; i++) {
+        //console.log(this.cols[i])
+        dataTable.addColumn(this.cols[i]);
+      }
+      dataTable.addRows(rows);
+      }
+      } else {
+
+        console.log('data')
         // Create dataTable from the passed data or the data attribute.
         // Data can be in the form of raw DataTable data or a two
         // dimensional array.
@@ -573,14 +625,14 @@ Data can be provided in one of three ways:
     },
 
     _dataChanged: function() {
-      console.log("_dataChanged")
+      //console.log("_dataChanged")
       //console.log(this.field)
-      console.log(this.data[0])
+      //console.log(this.data)
       //console.log(this.data[1])
       var that = this
       var aggs = 0
       try{
-        var hits = this.data[0].aggregations[this.field].buckets;
+        var hits = this.data.aggregations[this.field].buckets;
       }
       catch(err){
         var hits = []
@@ -698,13 +750,14 @@ Data can be provided in one of three ways:
 
           return [key, lateral, montaditos, surena, lizarran];
         });
-        console.log(data)
+        //console.log(data)
       }
 
       else {
         var data = [];
         hits.forEach(function(entry) {
-          data.push([entry.key, entry.doc_count]);
+          console.log(entry)
+          data.push([entry.key, entry.type.buckets[0].doc_count, entry.type.buckets[1].doc_count, entry.type.buckets[2].doc_count, entry.type.buckets[3].doc_count]);
         });
       }
       //console.log(data)

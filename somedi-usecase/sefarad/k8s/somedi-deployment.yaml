@@ -1,0 +1,91 @@
+# ---
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: somedi-crawler
+# data:
+#     ES_ENDPOINT: "sefarad-es"
+#     ES_PORT: "9200"
+#     TWITTER_CONSUMER_KEY: "aXyLS0LMM69OBfpslDNe4oZxL"
+#     TWITTER_CONSUMER_SECRET: "nWJIjYoyWT3vm282CDiEGzIQ1ZlSTF2IwPFnoTbUXih95u2fY8"
+#     TWITTER_ACCESS_TOKEN: "377869454-OB1GQt1ycK5EGrdgHYoHdmJ8WbgTciezCKHXjzH2"
+#     TWITTER_ACCESS_TOKEN_SECRET: "qP5kXmi85SFvasv7RdECVwYc0gpch19mMJkISTcvjKc4x"
+#     FUSEKI_ENDPOINT: "sefarad-fuseki"
+#     FUSEKI_PORT: "3030"
+#     API_KEY_MEANING_CLOUD: "02079c6e4e97d85f3fa483cd42180042"
+# ---
+# apiVersion: extensions/v1beta1
+# kind: Deployment
+# metadata:
+#   name: somedi-crawler
+# spec:
+#   replicas: 1
+#   template:
+#     metadata:
+#       labels:
+#         role: somedi-luigi
+#         app: somedi-luigi
+#     spec:
+#       containers:
+#       - name: gsicrawler
+#         image: registry.cluster.gsi.dit.upm.es/sefarad/dashboard-somedi/gsicrawler:v1.0.9
+#         imagePullPolicy: Always
+#         resources:
+#           limits:
+#             memory: "512Mi"
+#             cpu: "200m"
+#         ports:
+#           - name: luigiweb
+#             containerPort: 8082
+#         envFrom:
+#         - configMapRef:
+#             name: somedi-crawler
+#       - name: senpy
+#         image: gsiupm/sentiment-meaningcloud:0.1.7-python3.5
+#         imagePullPolicy: Always
+#         resources:
+#           limits:
+#             memory: "512Mi"
+#             cpu: "200m"
+#         ports:
+#           - name: senpy
+#             containerPort: 5000
+#         envFrom:
+#         - configMapRef:
+#             name: somedi-crawler
+# ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: somedi-web-unstable
+data:
+    ES_ENDPOINT_EXTERNAL: "sefarad-elasticsearch.cluster.gsi.dit.upm.es"
+    FUSEKI_ENDPOINT_EXTERNAL: "sefarad-fuseki.cluster.gsi.dit.upm.es"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: somedi-web-unstable
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        role: somedi-web-unstable
+        app: somedi-web.unstable
+    spec:
+      containers:
+      - name: somedi
+        image: registry.cluster.gsi.dit.upm.es/sefarad/dashboard-somedi/web:unstable
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+          - name: web
+            containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: somedi-web-unstable
+

@@ -1,0 +1,24 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: somedi-web-unstable
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  # - host:  somedi.cluster.gsi.dit.upm.es
+  #   http:
+  #     paths:
+  #     - path: /
+  #       backend:
+  #         serviceName: somedi-web
+  #         servicePort: 8080
+  - host: unstable.somedi.cluster.gsi.dit.upm.es
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: somedi-web-unstable
+          servicePort: 8080
+

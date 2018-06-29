@@ -77,7 +77,7 @@
             },
             addfilter: function(){
               //console.log("filter add "+this.object)
-              var object = this.object;
+              var object = this.object.toLowerCase();
               var aggkey = this.aggkey;
               //console.log(aggkey)
               this.push('filters', {terms: { 'schema:author' : [object]}})

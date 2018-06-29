@@ -39,7 +39,7 @@
     </div>
   <paper-tabs selected="{{selected}}">
       <paper-tab>Brand Overview</paper-tab>
-      <paper-tab>Competitors Comparision</paper-tab>
+      <paper-tab>Competition Analysis</paper-tab>
       <paper-tab>About</paper-tab>
     </paper-tabs>
 
@@ -78,7 +78,7 @@
               aggKey="schema:author"
               title="Tripadvisor reviews"
               filters="{{filters}}"
-              icon="/images/facebook-white.png"
+              icon="/images/tripadvisor-white.png"
               subtitle="Total elements">
             </number-chart>
           </div>
@@ -223,8 +223,8 @@
             options='{"title": "Posts and Comments per brand"}'
             comparison="{{competitors}}"
           </google-chart-comparison>
-         </div>
         </div>
+      </div>
       <br>
       <div class="row"> 
         <div class="col-md-6">
@@ -236,7 +236,7 @@
             type='column'
             filters="{{filters}}"
             icon='social:mood'
-            optionsbi='{"colors": ["#00C0EF", "#DD4B39", "#90ba3e","#da8709"], "explorer": { "actions": ["dragToZoom", "rightClickToReset"], "axis": "horizontal", "keepInBounds": true, "maxZoomIn": 10.0}}'
+            optionsbi='{"colors": ["#00C0EF", "#DD4B39", "#90ba3e","#da8709"], "explorer": { "actions": ["dragToZoom", "rightClickToReset"], "axis": "horizontal", "keepInBounds": true, "maxZoomIn": 10.0}, "vAxis": { "format" :"percent"} }'
             options='{"title": "Sentiment Comparison"}'
             comparison="{{competitors}}"
           </google-chart-comparison>
@@ -250,13 +250,19 @@
             type='bar'
             filters="{{filters}}"
             icon='social:mood'
-            optionsbi='{"colors": ["#00C0EF", "#DD4B39", "#90ba3e","#da8709"], "explorer": { "actions": ["dragToZoom", "rightClickToReset"], "axis": "horizontal", "keepInBounds": true, "maxZoomIn": 10.0}}'
+            optionsbi='{"colors": ["#00C0EF", "#DD4B39", "#90ba3e","#da8709"], "explorer": { "actions": ["dragToZoom", "rightClickToReset"], "axis": "horizontal", "keepInBounds": true, "maxZoomIn": 10.0}, "hAxis": { "format" :"percent"}}'
             options='{"title": "Source Comparison"}'
             comparison="{{competitors}}"
           </google-chart-comparison>
-         </div>
-        </div> 
-
+        </div>
+      </div> 
+      <br>
+      <div class="row"> 
+        <div class="col-md-6">
+         
+        </div>
+        </div>
+      </div> 
     </div>
     <div>
         This demo shows Soneti functionalities in the context of the project Somedi. The presented demo is the result of the ingest of the crawled online data and posterior analysis and semantic augmentation of said data. The resulting information is stored in both ElastiSearch and Fuseki databases, which allows the user to consult the data is a variety of forms, as showed. 
@@ -440,7 +446,7 @@
         if(ready){
           this.client.search({
           // undocumented params are appended to the query string
-          index: "somedi",
+          index: "somedi-unstable",
           type: "lateral",
           body: {
             size: 500,
@@ -573,7 +579,7 @@
         if(ready){
           this.client.search({
           // undocumented params are appended to the query string
-          index: "somedi",
+          index: "somedi-unstable",
           body: {
             size: 2000,
             query: {

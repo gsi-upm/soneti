@@ -1,5 +1,5 @@
 #!/bin/sh
-curl -XPUT http://localhost:9200/somedi/_mapping/texts?update_all_types -d '
+curl -XPUT http://localhost:9200/somedi-unstable/_mapping/texts?update_all_types -d '
 {
   "properties": {
     "schema:articleBody": { 

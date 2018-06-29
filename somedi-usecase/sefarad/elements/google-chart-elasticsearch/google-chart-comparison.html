@@ -48,10 +48,10 @@ Data can be provided in one of three ways:
     <div id="chartdiv" on-tap="makezoom"></div>
     <google-legacy-loader on-api-load="_readyForAction"></google-legacy-loader>
 
-    <!--<div style="float:right">
-      <small>Clear Filters</small>
-      <paper-icon-button icon="delete" alt="menu" class="green" on-tap="removeFilters"></paper-icon-button>
-    </div>-->
+    <div style="float:right; height: 50px">
+      <!--<small>Clear Filters</small>
+      <paper-icon-button icon="delete" alt="menu" class="green" on-tap="removeFilters"></paper-icon-button>-->
+    </div>
     <div style="width:100%; clear: both"></div>
   </paper-material>
 </template>
@@ -558,47 +558,47 @@ Data can be provided in one of three ways:
         this.filas.forEach(function(entry,index){
           if(that.comparison.length == 0){
             that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"}]
-            rows.push([entry[0], entry[1]])
+            rows.push([entry[0], entry[1]/entry[1]])
           }
 
           if(that.comparison.length == 1){
             if (that.comparison.indexOf('montaditos') > -1) {
               that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"}, {"label": "100 Montaditos", "type": "number"}]
-              rows.push([entry[0], entry[1], entry[2]])
+              rows.push([entry[0], entry[1]/(entry[1]+entry[2]), entry[2]/(entry[1]+entry[2])])
 
             }
             else if (that.comparison.indexOf('surena') > -1) {
               that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "La Sureña", "type": "number"}]
-              rows.push([entry[0], entry[1], entry[3]])
+              rows.push([entry[0], entry[1]/(entry[1]+entry[3]), entry[3]/(entry[1]+entry[3])])
 
             }
             else if (that.comparison.indexOf('lizarran') > -1) {
               that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "Lizarrán", "type": "number"}]
-              rows.push([entry[0], entry[1], entry[4]])
+              rows.push([entry[0], entry[1]/(entry[1]+entry[4]), entry[4]/(entry[1]+entry[4])])
             }
           }
           if(that.comparison.length == 2){
             if (that.comparison.indexOf('montaditos') < 0) {
               that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "Sureña", "type": "number"},{"label": "Lizarrán", "type": "number"}]
-              rows.push([entry[0], entry[1], entry[3], entry[4]])
+              rows.push([entry[0], entry[1]/(entry[1]+entry[3]+entry[4]), entry[3]/(entry[1]+entry[3]+entry[4]), entry[4]/(entry[1]+entry[3]+entry[4])])
             }
             else if (that.comparison.indexOf('surena') < 0) {
               that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "Montaditos", "type": "number"},{"label": "Lizarrán", "type": "number"}]
-              rows.push([entry[0], entry[1], entry[2], entry[4]])
+              rows.push([entry[0], entry[1]/(entry[1]+entry[2]+entry[4]), entry[2]/(entry[1]+entry[2]+entry[4]), entry[4]/(entry[1]+entry[2]+entry[4])])
             }
             else if (that.comparison.indexOf('lizarran') < 0) {
               that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"},{"label": "Montaditos", "type": "number"},{"label": "Sureña", "type": "number"}]
-              rows.push([entry[0], entry[1], entry[2], entry[3]])
+              rows.push([entry[0], entry[1]/(entry[1]+entry[2]+entry[3]), entry[2]/(entry[1]+entry[3]+entry[2]), entry[3]/(entry[1]+entry[3]+entry[2])])
             }
           }
 
           if(that.comparison.length == 3){
             that.cols=[{"label": "Brand", "type": "string"},{"label": "Lateral", "type": "number"}, {"label": "Montaditos", "type": "number"},{"label": "Sureña", "type": "number"},{"label": "Lizarrán", "type": "number"}]
-            rows.push([entry[0], entry[1], entry[2],entry[3], entry[4]])
+            rows.push([entry[0], entry[1]/(entry[1]+entry[3]+entry[4]+entry[2]), entry[2]/(entry[1]+entry[3]+entry[4]+entry[2]),entry[3]/(entry[1]+entry[3]+entry[4]+entry[2]), entry[4]/(entry[1]+entry[3]+entry[4]+entry[2])])
           }
         });
-      console.log(this.cols)
-      console.log(rows)
+      //console.log(this.cols)
+      //console.log(rows)
       dataTable = new google.visualization.DataTable();
       dataTable.cols = this.cols;
       for (var i = 0; i < this.cols.length; i++) {
@@ -609,7 +609,7 @@ Data can be provided in one of three ways:
       }
       } else {
 
-        console.log('data')
+        //console.log('data')
         // Create dataTable from the passed data or the data attribute.
         // Data can be in the form of raw DataTable data or a two
         // dimensional array.
@@ -617,10 +617,12 @@ Data can be provided in one of three ways:
 
           dataTable = new google.visualization.DataTable(data);
         } else if (data.length > 0) {
-          console.log(data)
+          //console.log(data)
           dataTable = google.visualization.arrayToDataTable(data);
         }
       }
+      //console.log(this.cols)
+      //console.log(rows)
       return dataTable;
     },
 
@@ -755,9 +757,10 @@ Data can be provided in one of three ways:
 
       else {
         var data = [];
+        console.log(hits)
         hits.forEach(function(entry) {
-          console.log(entry)
-          data.push([entry.key, entry.type.buckets[0].doc_count, entry.type.buckets[1].doc_count, entry.type.buckets[2].doc_count, entry.type.buckets[3].doc_count]);
+          //console.log(entry)
+          data.push([entry.key, (entry.type.buckets[0].doc_count),  (entry.type.buckets[1].doc_count),  (entry.type.buckets[2].doc_count),  (entry.type.buckets[3].doc_count)]);
         });
       }
       //console.log(data)

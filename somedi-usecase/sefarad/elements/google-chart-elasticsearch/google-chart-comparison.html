@@ -760,7 +760,7 @@ Data can be provided in one of three ways:
         console.log(hits)
         hits.forEach(function(entry) {
           //console.log(entry)
-          data.push([entry.key, (entry.type.buckets[0].doc_count),  (entry.type.buckets[1].doc_count),  (entry.type.buckets[2].doc_count),  (entry.type.buckets[3].doc_count)]);
+          data.push([entry.key, (entry.type.buckets[3].doc_count),  (entry.type.buckets[1].doc_count),  (entry.type.buckets[0].doc_count),  (entry.type.buckets[2].doc_count)]);
         });
       }
       //console.log(data)

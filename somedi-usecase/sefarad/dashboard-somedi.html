@@ -446,7 +446,7 @@
         if(ready){
           this.client.search({
           // undocumented params are appended to the query string
-          index: "somedi-unstable",
+          index: "somedi",
           type: "lateral",
           body: {
             size: 500,
@@ -579,7 +579,7 @@
         if(ready){
           this.client.search({
           // undocumented params are appended to the query string
-          index: "somedi-unstable",
+          index: "somedi",
           body: {
             size: 2000,
             query: {
@@ -613,7 +613,7 @@
                  },
                },
                aggs: {
-                'type' : { "terms" : { "field" : "_type" } }
+                'type' : { "terms" : { "field" : "_type", "order": {"_term": "desc"}} }
                }
              },
              'typesource': {
@@ -624,7 +624,7 @@
                  },
                },
                aggs: {
-                'type' : { "terms" : { "field" : "_type" } }
+                'type' : { "terms" : { "field" : "_type" ,"order": {"_term": "desc"}} }
                }
              },               
              'comments.data.from.name': {
